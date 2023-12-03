@@ -1,6 +1,6 @@
 import sys
 from pydub import AudioSegment
-
+from pydub.utils import mediainfo
 
 def parse_timestamp(timestamp: str) -> int:
     """
@@ -27,7 +27,8 @@ def cut_audio(input_file, timestamps):
         # Cut the audio and export
         segment = audio[start_ms:end_ms]
         output_file = f"{i + 1:02d}.mp3"
-        segment.export(output_file, format="mp3")
+        original_bitrate = mediainfo(input_file)['bit_rate']
+        segment.export(output_file, format="mp3", bitrate=original_bitrate)
         print(f"Segment {i + 1} exported to {output_file}")
 
 
